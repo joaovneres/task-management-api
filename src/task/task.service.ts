@@ -27,4 +27,13 @@ export class TaskService {
         this.tasks[taskIndex] = task;
         console.log(this.tasks);
     }
+
+    delete(id: string) {
+        let taskIndex = this.tasks.findIndex(t => t.id === id);
+        if(taskIndex === -1) {
+            throw new NotFoundException(`Task with id ${id} not found`);
+        }
+        this.tasks.splice(taskIndex, 1);
+        console.log(this.tasks);
+    }
 }
