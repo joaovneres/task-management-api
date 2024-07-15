@@ -18,4 +18,13 @@ export class TaskService {
         }
         return foundTask;
     }
+
+    update(task: TaskDto) {
+        let taskIndex = this.tasks.findIndex(t => t.id === task.id);
+        if(taskIndex === -1) {
+            throw new NotFoundException(`Task with id ${task.id} not found`);
+        }
+        this.tasks[taskIndex] = task;
+        console.log(this.tasks);
+    }
 }
