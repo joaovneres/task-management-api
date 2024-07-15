@@ -13,15 +13,27 @@ export class TaskService {
 
     findById(id: string): TaskDto {
         const foundTask = this.tasks.find(task => task.id === id);
-        if(foundTask === undefined) {
+        if (foundTask === undefined) {
             throw new NotFoundException(`Task with id ${id} not found`);
         }
         return foundTask;
     }
 
+    findAll(params: { title: string, status: string }): TaskDto[] {
+        return this.tasks.filter(task => {
+            if (params.title != undefined && !task.title.includes(params.title)) {
+                return false;
+            }
+            if (params.status != undefined && !task.status.includes(params.status)) {
+                return false;
+            }
+            return true;
+        });
+    }
+
     update(task: TaskDto) {
         let taskIndex = this.tasks.findIndex(t => t.id === task.id);
-        if(taskIndex === -1) {
+        if (taskIndex === -1) {
             throw new NotFoundException(`Task with id ${task.id} not found`);
         }
         this.tasks[taskIndex] = task;
@@ -30,7 +42,7 @@ export class TaskService {
 
     delete(id: string) {
         let taskIndex = this.tasks.findIndex(t => t.id === id);
-        if(taskIndex === -1) {
+        if (taskIndex === -1) {
             throw new NotFoundException(`Task with id ${id} not found`);
         }
         this.tasks.splice(taskIndex, 1);
