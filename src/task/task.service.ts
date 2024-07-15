@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { TaskDto } from './task.dto';
+import { TaskDto, TaskStatusEnum } from './task.dto';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class TaskService {
@@ -7,8 +8,9 @@ export class TaskService {
     private tasks: TaskDto[] = [];
 
     create(task: TaskDto) {
+        task.id = uuid();
+        task.status = TaskStatusEnum.TO_DO;
         this.tasks.push(task);
-        console.log(this.tasks)
     }
 
     findById(id: string): TaskDto {
@@ -37,7 +39,6 @@ export class TaskService {
             throw new NotFoundException(`Task with id ${task.id} not found`);
         }
         this.tasks[taskIndex] = task;
-        console.log(this.tasks);
     }
 
     delete(id: string) {
@@ -46,6 +47,5 @@ export class TaskService {
             throw new NotFoundException(`Task with id ${id} not found`);
         }
         this.tasks.splice(taskIndex, 1);
-        console.log(this.tasks);
     }
 }
