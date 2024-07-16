@@ -52,16 +52,10 @@ export class TaskService {
     }
 
     async update(id: string, task: TaskDto): Promise<TaskDto> {
-        this.findById(id);
+        await this.findById(id);
         const updatedTask = await this.taskRepository.update(id, this.mapDtoToEntity(task));
 
-        return {
-            id: updatedTask.raw.id,
-            title: updatedTask.raw.title,
-            description: updatedTask.raw.description,
-            status: updatedTask.raw.status,
-            expirationDate: updatedTask.raw.expirationDate,
-        };
+        return await this.findById(id);
     }
 
     async delete(id: string) {
